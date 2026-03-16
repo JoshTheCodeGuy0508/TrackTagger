@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E103E3A52F689DFC00593BEF /* SwiftTagger in Frameworks */ = {isa = PBXBuildFile; productRef = E103E3A42F689DFC00593BEF /* SwiftTagger */; };
+		E103E3A82F689EEB00593BEF /* ShazamKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E103E3A72F689EEB00593BEF /* ShazamKit.framework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E103E3872F68989400593BEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +32,7 @@
 		E103E3792F68989200593BEF /* TrackTagger.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackTagger.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E103E3862F68989400593BEF /* TrackTaggerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackTaggerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E103E3902F68989400593BEF /* TrackTaggerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackTaggerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E103E3A72F689EEB00593BEF /* ShazamKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ShazamKit.framework; path = System/Library/Frameworks/ShazamKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -52,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E103E3A82F689EEB00593BEF /* ShazamKit.framework in Frameworks */,
+				E103E3A52F689DFC00593BEF /* SwiftTagger in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +86,7 @@
 				E103E37B2F68989200593BEF /* TrackTagger */,
 				E103E3892F68989400593BEF /* TrackTaggerTests */,
 				E103E3932F68989400593BEF /* TrackTaggerUITests */,
+				E103E3A62F689EEB00593BEF /* Frameworks */,
 				E103E37A2F68989200593BEF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +99,14 @@
 				E103E3902F68989400593BEF /* TrackTaggerUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E103E3A62F689EEB00593BEF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E103E3A72F689EEB00593BEF /* ShazamKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +129,7 @@
 			);
 			name = TrackTagger;
 			packageProductDependencies = (
+				E103E3A42F689DFC00593BEF /* SwiftTagger */,
 			);
 			productName = TrackTagger;
 			productReference = E103E3792F68989200593BEF /* TrackTagger.app */;
@@ -195,6 +213,9 @@
 			);
 			mainGroup = E103E3702F68989200593BEF;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E103E3A32F689DFC00593BEF /* XCRemoteSwiftPackageReference "SwiftTagger" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E103E37A2F68989200593BEF /* Products */;
 			projectDirPath = "";
@@ -573,6 +594,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E103E3A32F689DFC00593BEF /* XCRemoteSwiftPackageReference "SwiftTagger" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/NCrusher74/SwiftTagger.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E103E3A42F689DFC00593BEF /* SwiftTagger */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E103E3A32F689DFC00593BEF /* XCRemoteSwiftPackageReference "SwiftTagger" */;
+			productName = SwiftTagger;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E103E3712F68989200593BEF /* Project object */;
 }
