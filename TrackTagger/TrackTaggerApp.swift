@@ -1,10 +1,3 @@
-//
-//  TrackTaggerApp.swift
-//  TrackTagger
-//
-//  Created by Joshua Varnum on 3/16/26.
-//
-
 import SwiftUI
 
 @main
