@@ -1,25 +1,33 @@
 import Foundation
 import ShazamKit
-import AVFoundation
+@preconcurrency import AVFoundation
 
 // MARK: - Shazam Service
 class ShazamService: NSObject, SHSessionDelegate {
     static let shared = ShazamService()
     private var matchContinuation: CheckedContinuation<ShazamTrack, Error>?
+    private var session: SHSession?
     
     func identifyTrack(from fileURL: URL) async throws -> ShazamTrack {
-        let audioFile = try AVAudioFile(forReading: fileURL)
-        guard let pcmBuffer = AVAudioPCMBuffer(pcmFormat: audioFile.processingFormat, frameCapacity: AVAudioFrameCount(audioFile.length)) else {
-            throw NSError(domain: "ShazamService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to create audio buffer"])
-        }
-        
-        try audioFile.read(into: pcmBuffer)
+        _ = fileURL.startAccessingSecurityScopedResource()
+        defer { fileURL.stopAccessingSecurityScopedResource() }
         
         return try await withCheckedThrowingContinuation { continuation in
-            self.matchContinuation = continuation
-            let session = SHSession()
-            session.delegate = self
-            session.matchStreamingBuffer(pcmBuffer, at: nil)
+            Task {
+                do {
+                    let asset = AVURLAsset(url: fileURL)
+                    let signature = try await SHSignatureGenerator.signature(from: asset)
+                    
+                    DispatchQueue.main.async {
+                        self.matchContinuation = continuation
+                        self.session = SHSession()
+                        self.session?.delegate = self
+                        self.session?.match(signature)
+                    }
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
         }
     }
     
@@ -34,12 +42,14 @@ class ShazamService: NSObject, SHSessionDelegate {
         )
         matchContinuation?.resume(returning: shazamTrack)
         matchContinuation = nil
+        self.session = nil
     }
     
     func session(_ session: SHSession, didNotFindMatchFor signature: SHSignature, error: Error?) {
-        let error = NSError(domain: "ShazamService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Track not found in Shazam database"])
-        matchContinuation?.resume(throwing: error)
+        let nsError = NSError(domain: "ShazamService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Track not found in Shazam database"])
+        matchContinuation?.resume(throwing: nsError)
         matchContinuation = nil
+        self.session = nil
     }
 }
 
@@ -89,18 +99,16 @@ class CoverArtService {
         let (data, response) = try await URLSession.shared.data(from: url)
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-            return nil // Cover art may not exist for this release
+            return nil
         }
         
         let decoder = JSONDecoder()
         let result = try decoder.decode(CoverArtArchiveResponse.self, from: data)
         
-        // Find the front cover
         if let frontCover = result.images.first(where: { $0.front }) {
             return URL(string: frontCover.image)
         }
         
-        // Fallback to first available image
         return result.images.first.flatMap { URL(string: $0.image) }
     }
     
